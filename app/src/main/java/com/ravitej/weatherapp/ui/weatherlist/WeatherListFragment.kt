@@ -59,18 +59,22 @@ class WeatherListFragment : Fragment() {
     }
 
     private fun init() {
+        binding.viewModel = weatherListViewModel
         binding.rvWeatherList.adapter = adapter
 
         weatherListViewModel.weatherList.observe(this.viewLifecycleOwner) {
             when (it) {
                 is Result.Success -> {
+                    errorGroupVisibility(false)
                     loadingIndicator(false)
-                    adapter.submitList(it.data.list)
+                    adapter.submitList(it.data.weatherInfoList)
                 }
                 is Result.Error -> {
                     loadingIndicator(false)
+                    handleError(it)
                 }
                 is Result.Loading -> {
+                    errorGroupVisibility(false)
                     loadingIndicator(true)
                 }
             }
@@ -81,7 +85,16 @@ class WeatherListFragment : Fragment() {
         }
     }
 
+    private fun handleError(value: Result.Error) {
+        errorGroupVisibility(true)
+        binding.tvErrorText.text = value.errorMessage
+    }
+
     private fun loadingIndicator(isVisible: Boolean) {
         binding.loadingIndicator.visibility = if (isVisible) View.VISIBLE else View.GONE
+    }
+
+    private fun errorGroupVisibility(isVisible: Boolean) {
+        binding.groupError.visibility = if (isVisible) View.VISIBLE else View.GONE
     }
 }

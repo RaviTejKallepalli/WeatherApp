@@ -1,6 +1,7 @@
 package com.ravitej.weatherapp.di
 
 import com.ravitej.weatherapp.BuildConfig
+import com.ravitej.weatherapp.data.converters.WeatherDTOConverter
 import com.ravitej.weatherapp.data.remote.WeatherApi
 import com.ravitej.weatherapp.data.repository.WeatherRepository
 import dagger.Module
@@ -19,6 +20,6 @@ object ApiModule {
 
     @Provides
     fun provideWeatherRepository(weatherApi: WeatherApi): WeatherRepository {
-        return WeatherRepository(weatherApi, BuildConfig.API_KEY)
+        return WeatherRepository(weatherApi, BuildConfig.API_KEY, WeatherDTOConverter())
     }
 }

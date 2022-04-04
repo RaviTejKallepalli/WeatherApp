@@ -5,8 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavDirections
-import com.ravitej.weatherapp.data.entities.WeatherInfoDTO
-import com.ravitej.weatherapp.data.entities.WeatherListDTO
+import com.ravitej.weatherapp.data.entities.WeatherInfo
+import com.ravitej.weatherapp.data.entities.WeatherInfoList
 import com.ravitej.weatherapp.data.repository.WeatherRepository
 import com.ravitej.weatherapp.ui.weatherdetails.WeatherDetailsArgs
 import com.ravitej.weatherapp.ui.weatherlist.listener.OnClickListener
@@ -22,11 +22,15 @@ class WeatherListViewModel @AssistedInject constructor(
     @Assisted val cityName: String
 ) : ViewModel(), OnClickListener {
 
-    private val _weatherList = MutableLiveData<Result<WeatherInfoDTO>>()
-    val weatherList: LiveData<Result<WeatherInfoDTO>> = _weatherList
+    private val _weatherList = MutableLiveData<Result<WeatherInfoList>>()
+    val weatherList: LiveData<Result<WeatherInfoList>> = _weatherList
     val navigateTo: SingleLiveEvent<NavDirections> = SingleLiveEvent()
 
     init {
+        loadWeatherData()
+    }
+
+    fun loadWeatherData() {
         viewModelScope.launch {
             weatherRepository.getForecastByCityName(cityName)
                 .collect {
@@ -35,14 +39,14 @@ class WeatherListViewModel @AssistedInject constructor(
         }
     }
 
-    override fun onClick(itemDetails: WeatherListDTO) {
+    override fun onClick(itemDetails: WeatherInfo) {
         val navDirections = WeatherListFragmentDirections.navFromWeatherlistToWeatherdetails(
             WeatherDetailsArgs(
                 cityName,
-                itemDetails.main.temp.toInt().toString(),
-                itemDetails.main.feels_like.toInt().toString(),
-                itemDetails.weather[0].main,
-                itemDetails.weather[0].description
+                itemDetails.currentTemp,
+                itemDetails.feelsLikeTemp,
+                itemDetails.weatherCondition,
+                itemDetails.weatherDescription
             )
         )
 

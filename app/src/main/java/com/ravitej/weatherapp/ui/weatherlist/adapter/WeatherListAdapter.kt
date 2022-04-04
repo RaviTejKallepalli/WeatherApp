@@ -7,12 +7,12 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.ravitej.weatherapp.R
-import com.ravitej.weatherapp.data.entities.WeatherListDTO
+import com.ravitej.weatherapp.data.entities.WeatherInfo
 import com.ravitej.weatherapp.databinding.LayoutWeatherListItemBinding
 import com.ravitej.weatherapp.ui.weatherlist.listener.OnClickListener
 
 class WeatherListAdapter(private val onClickListener: OnClickListener) :
-    ListAdapter<WeatherListDTO, WeatherListAdapter.WeatherListViewHolder>(WeatherListDiffUtil) {
+    ListAdapter<WeatherInfo, WeatherListAdapter.WeatherListViewHolder>(WeatherListDiffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WeatherListViewHolder {
         val binding: LayoutWeatherListItemBinding = DataBindingUtil.inflate(
@@ -34,11 +34,11 @@ class WeatherListAdapter(private val onClickListener: OnClickListener) :
         private val onClickListener: OnClickListener
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(weatherItem: WeatherListDTO) {
-            binding.tvWeatherCondition.text = weatherItem.weather[0].main
+        fun bind(weatherItem: WeatherInfo) {
+            binding.tvWeatherCondition.text = weatherItem.weatherCondition
             binding.tvWeatherTemp.text = binding.tvWeatherTemp.context.getString(
                 R.string.temp_format,
-                weatherItem.main.temp.toInt().toString()
+                weatherItem.currentTemp
             )
             binding.container.setOnClickListener {
                 onClickListener.onClick(weatherItem)
@@ -46,12 +46,12 @@ class WeatherListAdapter(private val onClickListener: OnClickListener) :
         }
     }
 
-    object WeatherListDiffUtil : DiffUtil.ItemCallback<WeatherListDTO>() {
-        override fun areItemsTheSame(oldItem: WeatherListDTO, newItem: WeatherListDTO): Boolean {
+    object WeatherListDiffUtil : DiffUtil.ItemCallback<WeatherInfo>() {
+        override fun areItemsTheSame(oldItem: WeatherInfo, newItem: WeatherInfo): Boolean {
             return false
         }
 
-        override fun areContentsTheSame(oldItem: WeatherListDTO, newItem: WeatherListDTO): Boolean {
+        override fun areContentsTheSame(oldItem: WeatherInfo, newItem: WeatherInfo): Boolean {
             return false
         }
     }
