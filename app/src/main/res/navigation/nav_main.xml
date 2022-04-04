@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_main"
+    app:startDestination="@id/enterCityName">
+
+    <fragment
+        android:id="@+id/enterCityName"
+        android:name="com.ravitej.weatherapp.ui.entercityname.EnterCityNameFragment"
+        tools:layout="@layout/fragment_enter_city_name">
+
+        <action
+            android:id="@+id/nav_from_entercityname_to_weatherList"
+            app:destination="@id/weatherList" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/weatherList"
+        android:name="com.ravitej.weatherapp.ui.weatherlist.WeatherListFragment"
+        tools:layout="@layout/fragment_weather_list">
+
+        <argument
+            android:name="cityName"
+            app:argType="string" />
+
+        <action
+            android:id="@+id/nav_from_weatherlist_to_weatherdetails"
+            app:destination="@id/weatherDetails" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/weatherDetails"
+        android:name="com.ravitej.weatherapp.ui.weatherdetails.WeatherDetailsFragment"
+        tools:layout="@layout/fragment_weather_details">
+        <argument
+            android:name="weatherDetails"
+            app:argType="com.ravitej.weatherapp.ui.weatherdetails.WeatherDetailsArgs" />
+    </fragment>
+</navigation>
